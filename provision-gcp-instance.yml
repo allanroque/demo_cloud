@@ -1,5 +1,5 @@
 ---
-- name: Create a GCP instance
+- name: Create GCP resources
   hosts: localhost
   gather_facts: false
   vars:
@@ -7,6 +7,7 @@
     gcp_project: openenv-l5qgx
     gcp_region: us-central1
     gcp_zone: us-central1-a
+    rhel_image: projects/rhel-cloud/global/images/rhel-9-v20230131
   tasks:
     - name: Create VPC
       google.cloud.gcp_compute_network:
@@ -47,8 +48,7 @@
             initialize_params:
               source_image: "{{ rhel_image }}"
         network_interfaces:
-          - network: "{{ vpc.selfLink }}"
-            subnetwork: "{{ subnet.selfLink }}"
+          - subnetwork: "{{ subnet.selfLink }}"
             access_configs:
               - name: External NAT
                 nat_ip: "{{ public_ip.address }}"
@@ -61,3 +61,4 @@
     - name: Show instance details
       debug:
         msg: "Instance created with public IP: {{ public_ip.address }}"
+

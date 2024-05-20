@@ -36,7 +36,7 @@
             initialize_params:
               source_image: projects/rhel-cloud/global/images/rhel-9-v20230131
         network_interfaces:
-          - network: "{{ network.selfLink }}"
+          - network: "{{ network.network.selfLink }}"
             access_configs:
               - name: External NAT
                 nat_ip: "{{ address.address }}"

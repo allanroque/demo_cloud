@@ -1,3 +1,12 @@
+---
+- name: Create a GCP instance
+  hosts: localhost
+  gather_facts: false
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    gcp_project: openenv-l5qgx
+    gcp_region: us-central1
+    gcp_zone: us-central1-a
   tasks:
     - name: Create VPC
       google.cloud.gcp_compute_network:

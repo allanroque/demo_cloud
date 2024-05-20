@@ -5,11 +5,13 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
     gcp_project: openenv-l5qgx
+    gcp_region: us-central1
     gcp_zone: us-central1-a
   tasks:
     - name: Create a VPC network
       google.cloud.gcp_compute_network:
         name: network-instance
+        auto_create_subnetworks: true
         project: "{{ gcp_project }}"
         auth_kind: serviceaccount
         state: present
@@ -18,7 +20,7 @@
     - name: Create an IPv4 public IP Address
       google.cloud.gcp_compute_address:
         name: address-instance
-        region: us-central1
+        region: "{{ gcp_region }}"
         project: "{{ gcp_project }}"
         auth_kind: serviceaccount
         state: present

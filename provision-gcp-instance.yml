@@ -5,27 +5,27 @@
      gcp_project: openenv-l5qgx
      gcp_cred_kind: serviceaccount
   tasks:
-    - name: create a disk mapped from RHEL8 image
-      gcp_compute_disk:
+    - name: Create a disk mapped from RHEL9 image
+      google.cloud.gcp_compute_disk:
         name: disk-instance
         size_gb: 50
-        source_image: projects/rhel-cloud/global/images/rhel-8-v20190905
+        source_image: projects/rhel-cloud/global/images/rhel-9-v20220420
         zone: us-central1-a
         project: "{{ gcp_project }}"
         auth_kind: "{{ gcp_cred_kind }}"
         state: present
       register: disk
 
-    - name: create a  VPC network
-      gcp_compute_network:
+    - name: Create a VPC network
+      google.cloud.gcp_compute_network:
         name: network-instance
         project: "{{ gcp_project }}"
         auth_kind: "{{ gcp_cred_kind }}"
         state: present
       register: network
 
-    - name: create an IPv4 public IP Address
-      gcp_compute_address:
+    - name: Create an IPv4 public IP Address
+      google.cloud.gcp_compute_address:
         name: address-instance
         region: us-central1
         project: "{{ gcp_project }}"
@@ -33,24 +33,27 @@
         state: present
       register: address
 
-    - name: create the RHEL8 instance
-      gcp_compute_instance:
-        name: rhel8
+    - name: Create the RHEL9 instance
+      google.cloud.gcp_compute_instance:
+        name: rhel9
         machine_type: n1-standard-1
         disks:
-        - auto_delete: 'true'
-          boot: 'true'
-          source: "{{ disk }}"
+          - auto_delete: 'true'
+            boot: 'true'
+            source: "{{ disk.selfLink }}"
         network_interfaces:
-        - network: "{{ network }}"
-          access_configs:
-          - name: External NAT
-            nat_ip: "{{ address }}"
-            type: ONE_TO_ONE_NAT
+          - network: "{{ network.selfLink }}"
+            access_configs:
+              - name: External NAT
+                nat_ip: "{{ address.address }}"
+                type: ONE_TO_ONE_NAT
         zone: us-central1-a
         project: "{{ gcp_project }}"
         auth_kind: "{{ gcp_cred_kind }}"
         state: present
-    - name: Show RHEL8 Instance Details
+      register: instance
+
+    - name: Show RHEL9 Instance Details
       debug:
-        msg: "The RHEL8 instance is accessible at {{ address.address }}"
+        msg: "The RHEL9 instance is accessible at {{ address.address }}"
+

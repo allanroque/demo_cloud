@@ -6,7 +6,6 @@
     - name: Create a GCP instance
       google.cloud.gcp_compute_instance:
         auth_kind: serviceaccount
-        service_account_file: /path/to/gcp-service-account.json
         project: openenv-l5qgx
         zone: us-central1-a
         name: my-rhel9-instance

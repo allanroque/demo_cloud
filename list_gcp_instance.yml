@@ -2,11 +2,15 @@
 - name: List GCP instances
   hosts: localhost
   gather_facts: false
+  vars:
+    gcp_project: openenv-l5qgx
+    gcp_zone: us-central1-a
   tasks:
-    - name: List all instances in the project
+    - name: List all instances in the project and zone
       google.cloud.gcp_compute_instance_info:
         auth_kind: serviceaccount
-        project: openenv-l5qgx
+        project: "{{ gcp_project }}"
+        zone: "{{ gcp_zone }}"
       register: instances
 
     - name: Display instances

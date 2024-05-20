@@ -2,8 +2,8 @@
 - name: Create a GCP instance
   hosts: localhost
   vars:
-     gcp_project: openenv-l5qgx
-     gcp_cred_kind: serviceaccount
+    gcp_project: openenv-l5qgx
+    gcp_cred_kind: serviceaccount
   tasks:
     - name: Create a disk mapped from RHEL9 image
       google.cloud.gcp_compute_disk:

@@ -1,0 +1,14 @@
+---
+- name: List GCP instances
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: List all instances in the project
+      google.cloud.gcp_compute_instance_info:
+        auth_kind: serviceaccount
+        project: openenv-l5qgx
+      register: instances
+
+    - name: Display instances
+      debug:
+        var: instances

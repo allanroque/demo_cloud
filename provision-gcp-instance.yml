@@ -1,0 +1,29 @@
+---
+- name: Provision a GCP instance
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Create a GCP instance
+      google.cloud.gcp_compute_instance:
+        auth_kind: serviceaccount
+        service_account_file: /path/to/gcp-service-account.json
+        project: openenv-l5qgx
+        zone: us-central1-a
+        name: my-rhel9-instance
+        machine_type: n1-standard-1
+        disks:
+          - auto_delete: true
+            boot: true
+            source:
+              image: projects/rhel-cloud/global/images/rhel-9-v20220420
+        network_interfaces:
+          - network: default
+            access_configs:
+              - name: External NAT
+                type: ONE_TO_ONE_NAT
+      register: instance
+
+    - name: Output instance details
+      debug:
+        msg: "Instance {{ instance.name }} created with IP {{ instance.networkInterfaces[0].accessConfigs[0].natIP }}"
+

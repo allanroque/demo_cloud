@@ -1,0 +1,13 @@
+---
+- name: Retrieve VPC Information
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: List VPCs
+      amazon.aws.ec2_vpc_info:
+        region: "{{ aws_region }}"
+      register: vpc_info
+
+    - name: Display VPC Information
+      debug:
+        var: vpc_info.vpcs

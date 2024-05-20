@@ -1,0 +1,13 @@
+---
+- name: Dynamic Inventory and Reporting
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: Generate Dynamic Inventory Report
+      amazon.aws.ec2_instance_info:
+        region: "{{ aws_region }}"
+      register: ec2_info
+
+    - name: Display Dynamic Inventory
+      debug:
+        var: ec2_info.instances
